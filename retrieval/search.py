@@ -5,10 +5,10 @@ model = SentenceTransformer("BAAI/bge-large-en")
 
 client = chromadb.PersistentClient(path="./chroma_db")
 
-collection = client.get_or_create_collection("research_papers")
+collection = client.get_or_create_collection(name="research_papers")
 
 
-def search_papers(query, n_results=8):
+def search_papers(query, n_results=10):
 
     query_embedding = model.encode(query)
 
@@ -19,5 +19,6 @@ def search_papers(query, n_results=8):
 
     docs = results["documents"][0]
     meta = results["metadatas"][0]
+    dist = results["distances"][0]
 
-    return docs, meta
+    return docs, meta, dist
