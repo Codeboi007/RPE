@@ -8,7 +8,7 @@ client = chromadb.PersistentClient(path="./chroma_db")
 collection = client.get_or_create_collection(name="research_papers")
 
 
-def search_papers(query, n_results=10):
+def search_papers(query, n_results=5):
 
     query_embedding = model.encode(query)
 

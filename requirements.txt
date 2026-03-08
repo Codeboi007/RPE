@@ -2,3 +2,6 @@ pymupdf
 chromadb
 sentence-transformers
 tqdm
+rich 
+prompt_toolkit
+textual
