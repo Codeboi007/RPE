@@ -1,70 +1,44 @@
-# Repository
+# README.md
 
 ## Overview
-Generates repository documentation from parsed source.
-
-Project type: Unknown
-
-Parsed surface: **10 files** · **18 functions** · **0 classes**
+This repository contains a system for ingesting PDF documents, storing them in a database, and providing reasoning capabilities based on the ingested content.
 
 ## Architecture / How It Works
-The system consists of several modules:
-- **ingestion**: `ingestion/chunker.py`, `ingestion/pdf_parser.py` are responsible for text processing and paper loading.
-- **docs**: `readme.md` is used to generate repository documentation.
+- **Ingestion**: The system processes PDF files to extract text and chunk it into manageable pieces. These chunks are then stored in a database.
+- **Reasoning**: User queries are processed through a reasoning engine that retrieves relevant context from the stored chunks and provides answers.
 
 ## Project Structure
 ```text
 database/
-  - database/chroma_store.py
+  - chroma_store.py
 embeddings/
-  - embeddings/embedder.py
+  - embedder.py
 ingestion/
-  - ingestion/chunker.py
-  - ingestion/pdf_parser.py
+  - chunker.py
+  - pdf_parser.py
 reasoning/
-  - reasoning/context_ranker.py
-  - reasoning/engine.py
-retrieval/
-  - retrieval/search.py
+  - context_ranker.py
+  - engine.py
 root/
+  - main.py
+  - rpe.py
 ```
 
 ## Key Components
-- **`rpe.py`**: 
-  - symbols `agent()`, `show_sources()`, `show_help()`
-  - imports prompt_toolkit, prompt_toolkit.completion, prompt_toolkit.history, prompt_toolkit.styles, reasoning.engine, retrieval.search, rich.console, rich.markdown, rich.panel, rich.table, sys, time
-- **`reasoning/engine.py`**: 
-  - symbols `ask_model()`, `build_prompt()`, `reasoning_engine()`
-  - imports reasoning.context_ranker, requests
-- **`main.py`**: 
-  - symbols `ingest()`
-  - imports database.chroma_store, embeddings.embedder, ingestion.chunker, ingestion.pdf_parser
-- **`ingestion/pdf_parser.py`**: 
-  - symbols `extract_text()`, `load_papers()`
-  - imports fitz, re
-- **`retrieval/search.py`**: 
-  - symbols `search_papers()`
-  - imports chromadb, sentence_transformers
-- **`ingestion/chunker.py`**: 
-  - symbols `is_valid_chunk()`, `chunk_text()`
-  - imports none
-- **`database/chroma_store.py`**: 
-  - symbols `store_chunks()`
-  - imports chromadb
-- **`embeddings/embedder.py`**: 
-  - symbols `embed_chunks()`
-  - imports sentence_transformers
-- **`reasoning/context_ranker.py`**: 
-  - symbols `rank_context()`
-  - imports none
-- **`readme.md`**: 
-  - no detected symbols
-  - imports none
+- **`rpe.py`**: Contains functions `agent()`, `show_sources()`, `show_help()`. Imports `prompt_toolkit`, `prompt_toolkit.completion`, `prompt_toolkit.history`, `prompt_toolkit.styles`, `reasoning.engine`, `retrieval.search`, `rich`.
+- **`reasoning/engine.py`**: Contains functions `ask_model()`, `build_prompt()`, `reasoning_engine()`. Imports `reasoning.context_ranker`, `requests`.
+- **`main.py`**: Contains function `ingest()`. Imports `database.chroma_store`, `embeddings.embedder`, `ingestion.chunker`, `ingestion.pdf_parser`.
+- **`ingestion/pdf_parser.py`**: Contains functions `extract_text()`, `load_papers()`. Imports `fitz`, `re`.
+- **`ingestion/chunker.py`**: Contains functions `is_valid_chunk()`, `chunk_text()`. No imports.
+- **`database/chroma_store.py`**: Contains function `store_chunks()`. Imports `chromadb`.
+- **`embeddings/embedder.py`**: Contains function `embed_chunks()`. Imports `sentence_transformers`.
+- **`reasoning/context_ranker.py`**: Contains function `rank_context()`. No imports.
+- **`README.md`**: Documentation file. No symbols or imports.
 
 ## Technologies Used
-- **py**: 9 file(s)
-- **md**: 1 file(s)
-- **requests**
+- **Python**: 9 files
+- **Markdown**: 2 files
+- **Libraries**: `chromadb`, `fitz`, `prompt_toolkit`, `re`, `requests`, `rich`, `sentence_transformers`
 
 ## Usage
 ```bash
@@ -72,5 +46,5 @@ python main.py
 ```
 
 ## Notes / Limitations
-- The system has high coupling between modules, as indicated by the architectural risks.
-- The system has complexity in UI/UX, as indicated by the architectural risks.
+- **High Dependency on External Libraries**: `rpe.py` has a high dependency on external libraries, which could lead to maintenance issues if these libraries are deprecated or undergo significant changes.
+- **Tightly Coupled Ingestion Process**: The ingestion process in `main.py` is tightly coupled with the database and embedding functionalities, making it difficult to switch to a different database or embedding method.
