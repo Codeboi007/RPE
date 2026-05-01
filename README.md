@@ -1,10 +1,13 @@
 # Overview
-This repository contains a system for ingesting, processing, and reasoning over documents. It leverages embeddings, a vector database, and a reasoning engine to provide insights and answers based on the ingested content.
+This repository contains a system for ingesting, processing, and reasoning over documents. It includes functionalities for document ingestion, embedding, retrieval, and reasoning.
 
 # Architecture / How It Works
-- **Ingestion**: The system ingests documents, primarily PDFs, and processes them into chunks. These chunks are then embedded and stored in a vector database.
-- **Reasoning**: The reasoning engine retrieves relevant chunks from the database, ranks them based on context, and generates responses based on the ranked context.
-- **Retrieval**: The retrieval module handles searching through the stored embeddings to find the most relevant chunks for a given query.
+- **Ingestion**: Handles the parsing and chunking of documents. Modules include `ingestion/chunker.py` and `ingestion/pdf_parser.py`.
+- **Embeddings**: Converts text chunks into embeddings using `embeddings/embedder.py`.
+- **Database**: Manages the storage of embeddings with `database/chroma_store.py`.
+- **Retrieval**: Searches for relevant documents based on queries using `retrieval/search.py`.
+- **Reasoning**: Processes and ranks the context of retrieved documents using `reasoning/engine.py` and `reasoning/context_ranker.py`.
+- **User Interface**: Provides a command-line interface for interaction, managed by `rpe.py`.
 
 # Project Structure
 ```
@@ -26,19 +29,20 @@ retrieval/
 ```
 
 # Key Components
-- **`main.py`**: Contains the `ingest()` function, which orchestrates the ingestion process.
-- **`rpe.py`**: Provides user interaction functions `agent()`, `show_sources()`, and `show_help()`.
-- **`reasoning/engine.py`**: Handles the core reasoning logic with functions `ask_model()`, `build_prompt()`, and `reasoning_engine()`.
-- **`retrieval/search.py`**: Manages the search functionality with `search_papers()`.
-- **`database/chroma_store.py`**: Manages storage of document chunks with `store_chunks()`.
-- **`embeddings/embedder.py`**: Handles embedding of document chunks with `embed_chunks()`.
-- **`ingestion/chunker.py`**: Processes documents into chunks with `is_valid_chunk()`.
+- **`main.py`**: Contains the `ingest()` function, which orchestrates the ingestion process. Imports `database.chroma_store`, `embeddings.embedder`, `ingestion.chunker`, and `ingestion.pdf_parser`.
+- **`rpe.py`**: Provides user interaction functionalities through `agent()`, `show_sources()`, and `show_help()`. Imports `prompt_toolkit` and related modules for UI components.
+- **`reasoning/engine.py`**: Handles the core reasoning process with `ask_model()`, `build_prompt()`, and `reasoning_engine()`. Imports `reasoning.context_ranker` and `requests`.
+- **`retrieval/search.py`**: Manages the search functionality with `search_papers()`. Imports `chromadb` and `sentence_transformers`.
+- **`embeddings/embedder.py`**: Converts text into embeddings using `embed_chunks()`. Imports `sentence_transformers`.
+- **`database/chroma_store.py`**: Manages the storage of embeddings with `store_chunks()`. Imports `chromadb`.
+- **`ingestion/chunker.py`**: Handles the chunking of text with `is_valid_chunk()`. No additional imports.
+- **`reasoning/context_ranker.py`**: Ranks the context of retrieved documents with `rank_context()`. No additional imports.
+- **`README.md`**: Contains documentation and mentions the `handles` class. No additional imports.
 
 # Technologies Used
-- **Python**: Used for all code files.
-- **ChromaDB**: For vector database operations.
-- **Sentence Transformers**: For generating embeddings.
-- **Requests**: For making HTTP requests in the reasoning engine.
+- **Python**: 9 files
+- **Markdown**: 2 files
+- **External Libraries**: `chromadb`, `sentence_transformers`, `requests`, `prompt_toolkit`, `rich`
 
 # Usage
 ```bash
@@ -46,6 +50,6 @@ python main.py
 ```
 
 # Notes / Limitations
-- **Lack of Modularization**: The `main.py` and `rpe.py` files contain significant functionality without clear separation into smaller, reusable modules.
-- **Tight Coupling**: The `main.py` file directly depends on multiple modules, which could lead to tight coupling and make the system harder to maintain.
-- **Critical Modules**: `reasoning/engine.py` and `retrieval/search.py` are critical due to their roles in core reasoning and search functionalities, respectively.
+- **High Coupling**: `main.py` is tightly coupled with multiple modules (`database`, `embeddings`, `ingestion`), which may introduce maintenance challenges.
+- **External Dependencies**: `rpe.py` relies on external libraries (`prompt_toolkit`, `rich`) for UI components, which could introduce maintenance challenges.
+- **Critical Dependencies**: `reasoning/engine.py` and `retrieval/search.py` have high dependencies on both internal and external libraries, critical for their functionality.
