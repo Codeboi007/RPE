@@ -1,10 +1,11 @@
 # Overview
-This repository contains a system for ingesting PDF documents, processing their content, and answering queries based on the ingested data. The system is structured into several modules that handle different aspects of the process, including ingestion, reasoning, and storage.
+This repository contains a system for ingesting PDF documents, storing them, and reasoning over their contents. The system is structured to handle document ingestion, chunking, embedding, and querying.
 
 # Architecture / How It Works
-- **Ingestion**: The `ingestion/pdf_parser.py` module extracts text from PDF files, while `ingestion/chunker.py` splits the text into manageable chunks.
-- **Storage**: The `database/chroma_store.py` module stores these chunks in a database using ChromaDB.
-- **Reasoning**: The `reasoning/engine.py` module processes user queries, retrieves relevant context, and generates responses. It interacts with the `retrieval/search.py` module to find the most relevant information.
+- **Ingestion**: The system ingests PDF documents using `ingestion/pdf_parser.py` to extract text and `ingestion/chunker.py` to split the text into manageable chunks.
+- **Storage**: Chunks are stored using `database/chroma_store.py`, which leverages ChromaDB for efficient storage and retrieval.
+- **Embedding**: Text chunks are embedded using `embeddings/embedder.py` with Sentence Transformers to create vector representations.
+- **Reasoning**: The system reasons over the stored and embedded documents using `reasoning/engine.py`, which interacts with the stored data to answer queries.
 
 # Project Structure
 ```text
@@ -21,16 +22,17 @@ reasoning/
 ```
 
 # Key Components
-- **`rpe.py`**: Contains functions `agent()`, `show_sources()`, `show_help()`. Imports `prompt_toolkit`, `prompt_toolkit.completion`, `prompt_toolkit.history`, `prompt_toolkit.styles`, `reasoning.engine`, `retrieval.search`, `rich`.
-- **`main.py`**: Contains function `ingest()`. Imports `database.chroma_store`, `embeddings.embedder`, `ingestion.chunker`, `ingestion.pdf_parser`.
-- **`database/chroma_store.py`**: Contains function `store_chunks()`. Imports `chromadb`.
-- **`ingestion/pdf_parser.py`**: Contains functions `extract_text()`, `load_papers()`. Imports `fitz`, `re`.
-- **`ingestion/chunker.py`**: Contains functions `is_valid_chunk()`, `chunk_text()`.
-- **`reasoning/engine.py`**: Contains functions `ask_model()`, `build_prompt()`, `reasoning_engine()`. Imports `reasoning.context_ranker`, `requests`.
-- **`reasoning/context_ranker.py`**: Contains no functions. Imports none.
-- **`README.md`**: Contains no functions. Imports none.
+- **`rpe.py`**: Contains `agent()`, `show_sources()`, `show_help()`. Imports `prompt_toolkit`, `prompt_toolkit.completion`, `prompt_toolkit.history`, `prompt_toolkit.styles`.
+- **`main.py`**: Contains `ingest()`. Imports `database.chroma_store`, `embeddings.embedder`, `ingestion.chunker`, `ingestion.pdf_parser`.
+- **`ingestion/pdf_parser.py`**: Contains `extract_text()`, `load_papers()`. Imports `fitz`, `re`.
+- **`ingestion/chunker.py`**: Contains `is_valid_chunk()`, `chunk_text()`.
+- **`database/chroma_store.py`**: Contains `store_chunks()`. Imports `chromadb`.
+- **`embeddings/embedder.py`**: Contains `embed_chunks()`. Imports `sentence_transformers`.
+- **`reasoning/engine.py`**: Contains `ask_model()`, `build_prompt()`, `reasoning_engine()`. Imports `reasoning.context_ranker`, `requests`.
+- **`reasoning/context_ranker.py`**: Contains `rank_context()`.
+- **`README.md`**: Contains `extracts`, `stores`.
 
 # Technologies Used
 - **Python**: 9 files
 - **Markdown**: 2 files
-- **Libraries**: `chromadb`, `sentence_transformers`, `prompt_toolkit`, `rich
+- **Libraries**: `chromadb`, `sentence
