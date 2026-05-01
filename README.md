@@ -1,38 +1,44 @@
 # Overview
-This repository contains a system for ingesting PDF documents, storing them, and providing reasoning capabilities over the ingested data. The system is structured into several modules for ingestion, reasoning, and storage.
+This repository contains a system for ingesting, processing, and reasoning over documents. It leverages embeddings, a vector database, and a reasoning engine to provide insights and answers based on the ingested content.
 
 # Architecture / How It Works
-- **Ingestion**: The ingestion process involves parsing PDF documents to extract text and then chunking the text into manageable pieces. This is handled by `ingestion/pdf_parser.py` and `ingestion/chunker.py`.
-- **Reasoning**: The reasoning process involves querying the ingested data and providing answers based on the context. This is managed by `reasoning/engine.py` and `reasoning/context_ranker.py`.
-- **Storage**: The storage component handles the storage of text chunks in a database. This is facilitated by `database/chroma_store.py`.
+- **Ingestion**: The system ingests documents, primarily PDFs, and processes them into chunks. These chunks are then embedded and stored in a vector database.
+- **Reasoning**: The reasoning engine retrieves relevant chunks from the database, ranks them based on context, and generates responses based on the ranked context.
+- **Retrieval**: The retrieval module handles searching through the stored embeddings to find the most relevant chunks for a given query.
 
 # Project Structure
-```text
+```
 database/
   - chroma_store.py
 embeddings/
   - embedder.py
 ingestion/
   - chunker.py
-  - pdf_parser.py
 reasoning/
   - context_ranker.py
   - engine.py
+retrieval/
+  - search.py
+- main.py
+- rpe.py
+- README.md
+- readme.md
 ```
 
 # Key Components
-- **`rpe.py`**: Contains functions `agent()`, `show_sources()`, `show_help()`. Imports `prompt_toolkit`, `prompt_toolkit.completion`, `prompt_toolkit.history`, `prompt_toolkit.styles`.
-- **`reasoning/engine.py`**: Contains functions `ask_model()`, `build_prompt()`, `reasoning_engine()`. Imports `reasoning.context_ranker`, `requests`.
-- **`main.py`**: Contains function `ingest()`. Imports `database.chroma_store`, `embeddings.embedder`, `ingestion.chunker`, `ingestion.pdf_parser`.
-- **`ingestion/pdf_parser.py`**: Contains functions `extract_text()`, `load_papers()`. Imports `fitz`, `re`.
-- **`ingestion/chunker.py`**: Contains functions `is_valid_chunk()`, `chunk_text()`. No imports.
-- **`database/chroma_store.py`**: Contains function `store_chunks()`. Imports `chromadb`.
-- **`reasoning/context_ranker.py`**: Contains no functions. No imports.
+- **`main.py`**: Contains the `ingest()` function, which orchestrates the ingestion process.
+- **`rpe.py`**: Provides user interaction functions `agent()`, `show_sources()`, and `show_help()`.
+- **`reasoning/engine.py`**: Handles the core reasoning logic with functions `ask_model()`, `build_prompt()`, and `reasoning_engine()`.
+- **`retrieval/search.py`**: Manages the search functionality with `search_papers()`.
+- **`database/chroma_store.py`**: Manages storage of document chunks with `store_chunks()`.
+- **`embeddings/embedder.py`**: Handles embedding of document chunks with `embed_chunks()`.
+- **`ingestion/chunker.py`**: Processes documents into chunks with `is_valid_chunk()`.
 
 # Technologies Used
-- **Python**: 9 files.
-- **Markdown**: 2 files.
-- **Libraries**: `chromadb`, `fitz`, `prompt_toolkit`, `re`, `requests`, `rich`, `sentence_transformers`.
+- **Python**: Used for all code files.
+- **ChromaDB**: For vector database operations.
+- **Sentence Transformers**: For generating embeddings.
+- **Requests**: For making HTTP requests in the reasoning engine.
 
 # Usage
 ```bash
@@ -40,5 +46,6 @@ python main.py
 ```
 
 # Notes / Limitations
-- **High Dependency on External Libraries**: `rpe.py` has a high dependency on external libraries, which could lead to maintenance issues if these libraries are deprecated or undergo significant changes.
-- **Tight Coupling**: `main.py` has a tight coupling between ingestion components (`pdf_parser`, `chunker`), which could make it difficult to replace or modify these components in the future.
+- **Lack of Modularization**: The `main.py` and `rpe.py` files contain significant functionality without clear separation into smaller, reusable modules.
+- **Tight Coupling**: The `main.py` file directly depends on multiple modules, which could lead to tight coupling and make the system harder to maintain.
+- **Critical Modules**: `reasoning/engine.py` and `retrieval/search.py` are critical due to their roles in core reasoning and search functionalities, respectively.
