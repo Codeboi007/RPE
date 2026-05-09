@@ -1,13 +1,21 @@
-# Overview
-This repository contains a system for ingesting PDF documents, storing them, and reasoning over their contents. The system is structured to handle document ingestion, chunking, embedding, and querying.
+# README
 
-# Architecture / How It Works
-- **Ingestion**: The system ingests PDF documents using `ingestion/pdf_parser.py` to extract text and `ingestion/chunker.py` to split the text into manageable chunks.
-- **Storage**: Chunks are stored using `database/chroma_store.py`, which leverages ChromaDB for efficient storage and retrieval.
-- **Embedding**: Text chunks are embedded using `embeddings/embedder.py` with Sentence Transformers to create vector representations.
-- **Reasoning**: The system reasons over the stored and embedded documents using `reasoning/engine.py`, which interacts with the stored data to answer queries.
+## Overview
+This repository contains a system for ingesting PDF documents, processing their content, and providing reasoning capabilities based on the ingested data. The system is structured into several modules that handle different aspects of the workflow, from document ingestion to reasoning and response generation.
 
-# Project Structure
+## Architecture / How It Works
+- **Ingestion**: Handles the parsing and chunking of PDF documents.
+  - `ingestion/pdf_parser.py`: Extracts text from PDFs and loads them.
+  - `ingestion/chunker.py`: Validates and chunks the extracted text into manageable pieces.
+- **Database**: Manages the storage of document chunks.
+  - `database/chroma_store.py`: Stores chunks using ChromaDB.
+- **Embeddings**: Generates embeddings for the document chunks.
+  - `embeddings/embedder.py`: Uses Sentence Transformers to create embeddings.
+- **Reasoning**: Provides reasoning capabilities based on the ingested data.
+  - `reasoning/engine.py`: Manages the reasoning process, including building prompts and asking a model.
+  - `reasoning/context_ranker.py`: Ranks the context for better reasoning accuracy.
+
+## Project Structure
 ```text
 database/
   - chroma_store.py
@@ -19,20 +27,17 @@ ingestion/
 reasoning/
   - context_ranker.py
   - engine.py
+main.py
+rpe.py
+README.md
+readme.md
 ```
 
-# Key Components
-- **`rpe.py`**: Contains `agent()`, `show_sources()`, `show_help()`. Imports `prompt_toolkit`, `prompt_toolkit.completion`, `prompt_toolkit.history`, `prompt_toolkit.styles`.
-- **`main.py`**: Contains `ingest()`. Imports `database.chroma_store`, `embeddings.embedder`, `ingestion.chunker`, `ingestion.pdf_parser`.
-- **`ingestion/pdf_parser.py`**: Contains `extract_text()`, `load_papers()`. Imports `fitz`, `re`.
-- **`ingestion/chunker.py`**: Contains `is_valid_chunk()`, `chunk_text()`.
-- **`database/chroma_store.py`**: Contains `store_chunks()`. Imports `chromadb`.
-- **`embeddings/embedder.py`**: Contains `embed_chunks()`. Imports `sentence_transformers`.
-- **`reasoning/engine.py`**: Contains `ask_model()`, `build_prompt()`, `reasoning_engine()`. Imports `reasoning.context_ranker`, `requests`.
-- **`reasoning/context_ranker.py`**: Contains `rank_context()`.
-- **`README.md`**: Contains `extracts`, `stores`.
-
-# Technologies Used
-- **Python**: 9 files
-- **Markdown**: 2 files
-- **Libraries**: `chromadb`, `sentence
+## Key Components
+- **`rpe.py`**: Contains functions `agent()`, `show_sources()`, `show_help()`. Imports `prompt_toolkit` for interactive command-line interface.
+- **`main.py`**: Contains function `ingest()`. Imports modules for database storage, embedding, and ingestion.
+- **`ingestion/pdf_parser.py`**: Contains functions `extract_text()`, `load_papers()`. Imports `fitz` for PDF handling and `re` for regular expressions.
+- **`ingestion/chunker.py`**: Contains functions `is_valid_chunk()`, `chunk_text()`. No external imports.
+- **`database/chroma_store.py`**: Contains function `store_chunks()`. Imports `chromadb` for database operations.
+- **`embeddings/embedder.py`**: Contains function `embed_chunks()`. Imports `sentence_transformers` for embedding generation.
+- **`reasoning/engine.py`**: Contains functions `ask_model()`, `build_prompt()`, `reasoning_engine()`. Imports
