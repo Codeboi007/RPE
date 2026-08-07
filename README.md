@@ -8,8 +8,8 @@ Project type: Unknown
 Parsed surface: **11 files** · **18 functions** · **0 classes**
 
 ## Architecture / How It Works
-- **ingestion**: `ingestion/chunker.py`, `ingestion/pdf_parser.py`
-- **docs**: `README.md`, `readme.md`
+- **ingestion**: `ingestion/pdf_parser.py`, `ingestion/chunker.py`
+- **docs**: `readme.md`, `README.md`
 
 ## Project Structure
 ```text
