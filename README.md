@@ -1,53 +1,41 @@
 # Repository
-
 ## Overview
-Generates repository documentation from parsed source.
-
-Project type: Unknown
-
-Parsed surface: **11 files** · **18 functions** · **0 classes**
+This repository contains a collection of Python scripts and modules for ingesting, processing, and reasoning about data.
 
 ## Architecture / How It Works
-- **ingestion**: `ingestion/pdf_parser.py`, `ingestion/chunker.py`
-- **docs**: `readme.md`, `README.md`
+The repository is organized into several components:
+
+* **ingestion**: responsible for loading and processing data, implemented in `ingestion/pdf_parser.py` and `ingestion/chunker.py`.
+* **reasoning**: responsible for analyzing and reasoning about the data, implemented in `reasoning/engine.py` and `reasoning/context_ranker.py`.
+* **retrieval**: responsible for searching and retrieving data, implemented in `retrieval/search.py`.
+* **embeddings**: responsible for generating embeddings for the data, implemented in `embeddings/embedder.py`.
 
 ## Project Structure
-```text
-database/
-  - database/chroma_store.py
-embeddings/
-  - embeddings/embedder.py
-ingestion/
-  - ingestion/chunker.py
-  - ingestion/pdf_parser.py
-reasoning/
-  - reasoning/context_ranker.py
-  - reasoning/engine.py
-retrieval/
-  - retrieval/search.py
-root/
-```
+The repository is organized into the following directories:
+
+* `ingestion/`: contains scripts for ingesting and processing data.
+* `reasoning/`: contains scripts for analyzing and reasoning about the data.
+* `retrieval/`: contains scripts for searching and retrieving data.
+* `embeddings/`: contains scripts for generating embeddings for the data.
 
 ## Key Components
-- **`rpe.py`**: symbols `agent()`, `show_sources()`, `show_help()`; imports prompt_toolkit, prompt_toolkit.completion, prompt_toolkit.history, prompt_toolkit.styles.
-- **`reasoning/engine.py`**: symbols `ask_model()`, `build_prompt()`, `reasoning_engine()`; imports reasoning.context_ranker, requests.
-- **`main.py`**: symbols `ingest()`; imports database.chroma_store, embeddings.embedder, ingestion.chunker, ingestion.pdf_parser.
-- **`ingestion/pdf_parser.py`**: symbols `extract_text()`, `load_papers()`; imports fitz, re.
-- **`retrieval/search.py`**: symbols `search_papers()`; imports chromadb, sentence_transformers.
-- **`ingestion/chunker.py`**: symbols `is_valid_chunk()`, `chunk_text()`; imports none.
-- **`database/chroma_store.py`**: symbols `store_chunks()`; imports chromadb.
-- **`embeddings/embedder.py`**: symbols `embed_chunks()`; imports sentence_transformers.
-- **`reasoning/context_ranker.py`**: symbols `rank_context()`; imports none.
-- **`README.md`**: symbols no detected symbols; imports none.
-- **`readme.md`**: symbols no detected symbols; imports none.
+* **`rpe.py`**: contains functions for interacting with the repository, including `agent()`, `show_sources()`, and `show_help()`.
+* **`main.py`**: contains the main entry point for the repository, including the `ingest()` function.
+* **`ingestion/pdf_parser.py`**: contains functions for parsing and extracting text from PDFs, including `extract_text()` and `load_papers()`.
+* **`ingestion/chunker.py`**: contains functions for chunking text, including `is_valid_chunk()` and `chunk_text()`.
+* **`reasoning/engine.py`**: contains functions for reasoning about the data, including `ask_model()`, `build_prompt()`, and `reasoning_engine()`.
+* **`retrieval/search.py`**: contains functions for searching and retrieving data, including `search_papers()`.
 
 ## Technologies Used
-- **py**: 9 file(s)
-- **md**: 2 file(s)
-- **requests**
+* **Python**: used for implementing the repository's functionality.
+* **ChromaDB**: used for storing and retrieving data.
+* **Sentence Transformers**: used for generating embeddings for the data.
+* **Fitz**: used for parsing and extracting text from PDFs.
+* **Requests**: used for making HTTP requests.
 
 ## Usage
+To run the repository, execute the following command:
 ```bash
 python main.py
 ```
-
+Note: This command assumes that the repository is installed and configured correctly.
