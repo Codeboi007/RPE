@@ -1,41 +1,55 @@
 # Repository
+
 ## Overview
-This repository contains a collection of Python scripts and modules for ingesting, processing, and reasoning about data.
+A system for ingesting PDF documents, storing them in a vector database, and performing reasoning over the content via a model-driven engine.
 
 ## Architecture / How It Works
-The repository is organized into several components:
-
-* **ingestion**: responsible for loading and processing data, implemented in `ingestion/pdf_parser.py` and `ingestion/chunker.py`.
-* **reasoning**: responsible for analyzing and reasoning about the data, implemented in `reasoning/engine.py` and `reasoning/context_ranker.py`.
-* **retrieval**: responsible for searching and retrieving data, implemented in `retrieval/search.py`.
-* **embeddings**: responsible for generating embeddings for the data, implemented in `embeddings/embedder.py`.
+The system follows a pipeline from document ingestion to reasoning:
+1. **Ingestion**: PDFs are loaded and text is extracted, then split into validated chunks.
+2. **Storage**: Chunks are embedded and stored in a Chroma database.
+3. **Reasoning**: A reasoning engine builds prompts and queries a model, utilizing a context ranker to process retrieved information.
+4. **Interface**: An agent interface provides interaction, help, and source tracking.
 
 ## Project Structure
-The repository is organized into the following directories:
-
-* `ingestion/`: contains scripts for ingesting and processing data.
-* `reasoning/`: contains scripts for analyzing and reasoning about the data.
-* `retrieval/`: contains scripts for searching and retrieving data.
-* `embeddings/`: contains scripts for generating embeddings for the data.
+```text
+database/
+  - chroma_store.py
+embeddings/
+  - embedder.py
+ingestion/
+  - chunker.py
+  - pdf_parser.py
+reasoning/
+  - context_ranker.py
+  - engine.py
+retrieval/
+  - search.py
+main.py
+rpe.py
+```
 
 ## Key Components
-* **`rpe.py`**: contains functions for interacting with the repository, including `agent()`, `show_sources()`, and `show_help()`.
-* **`main.py`**: contains the main entry point for the repository, including the `ingest()` function.
-* **`ingestion/pdf_parser.py`**: contains functions for parsing and extracting text from PDFs, including `extract_text()` and `load_papers()`.
-* **`ingestion/chunker.py`**: contains functions for chunking text, including `is_valid_chunk()` and `chunk_text()`.
-* **`reasoning/engine.py`**: contains functions for reasoning about the data, including `ask_model()`, `build_prompt()`, and `reasoning_engine()`.
-* **`retrieval/search.py`**: contains functions for searching and retrieving data, including `search_papers()`.
+- **`rpe.py`**: Provides the user interface via `agent()`, `show_sources()`, and `show_help()`.
+- **`main.py`**: Orchestrates the ingestion process via `ingest()`.
+- **`reasoning/engine.py`**: Handles model interaction and prompt construction through `reasoning_engine()`, `ask_model()`, and `build_prompt()`.
+- **`ingestion/pdf_parser.py`**: Extracts text from PDF files using `load_papers()` and `extract_text()`.
+- **`ingestion/chunker.py`**: Processes text into segments using `chunk_text()` and `is_valid_chunk()`.
+- **`database/chroma_store.py`**: Manages data persistence via `store_chunks()`.
+- **`embeddings/embedder.py`**: Generates vector representations of text chunks.
+- **`retrieval/search.py`**: Performs searches across the stored papers.
+- **`reasoning/context_ranker.py`**: Ranks retrieved context for the reasoning engine.
 
 ## Technologies Used
-* **Python**: used for implementing the repository's functionality.
-* **ChromaDB**: used for storing and retrieving data.
-* **Sentence Transformers**: used for generating embeddings for the data.
-* **Fitz**: used for parsing and extracting text from PDFs.
-* **Requests**: used for making HTTP requests.
+- **Language**: Python
+- **Libraries**: 
+  - `chromadb` (Vector database)
+  - `sentence_transformers` (Embeddings)
+  - `fitz` (PDF processing)
+  - `prompt_toolkit` (CLI interface)
+  - `rich` (Console formatting)
+  - `requests` (HTTP requests)
 
 ## Usage
-To run the repository, execute the following command:
 ```bash
 python main.py
 ```
-Note: This command assumes that the repository is installed and configured correctly.
