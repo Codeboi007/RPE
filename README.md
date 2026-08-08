@@ -1,14 +1,14 @@
 # Repository
 
 ## Overview
-A system for ingesting PDF documents, storing them in a vector database, and performing reasoning over the content via a model-driven engine.
+A system for ingesting PDF documents, storing them into a vector database, and performing reasoning over the stored content.
 
 ## Architecture / How It Works
 The system follows a pipeline from document ingestion to reasoning:
-1. **Ingestion**: PDFs are loaded and text is extracted, then split into validated chunks.
-2. **Storage**: Chunks are embedded and stored in a Chroma database.
-3. **Reasoning**: A reasoning engine builds prompts and queries a model, utilizing a context ranker to process retrieved information.
-4. **Interface**: An agent interface provides interaction, help, and source tracking.
+1. **Ingestion**: PDFs are loaded and text is extracted via `ingestion/pdf_parser.py`, then split into segments using `ingestion/chunker.py`.
+2. **Storage**: Text chunks are processed by `embeddings/embedder.py` and stored in a vector database via `database/chroma_store.py`.
+3. **Reasoning**: Queries are processed by `reasoning/engine.py`, which utilizes `reasoning/context_ranker.py` to refine context before generating a response.
+4. **Interface**: `rpe.py` provides an agent interface for user interaction.
 
 ## Project Structure
 ```text
@@ -29,27 +29,20 @@ rpe.py
 ```
 
 ## Key Components
-- **`rpe.py`**: Provides the user interface via `agent()`, `show_sources()`, and `show_help()`.
-- **`main.py`**: Orchestrates the ingestion process via `ingest()`.
-- **`reasoning/engine.py`**: Handles model interaction and prompt construction through `reasoning_engine()`, `ask_model()`, and `build_prompt()`.
-- **`ingestion/pdf_parser.py`**: Extracts text from PDF files using `load_papers()` and `extract_text()`.
-- **`ingestion/chunker.py`**: Processes text into segments using `chunk_text()` and `is_valid_chunk()`.
+- **`main.py`**: Entry point for the ingestion process via the `ingest()` function.
+- **`rpe.py`**: Implements the user interface with `agent()`, `show_sources()`, and `show_help()`.
+- **`reasoning/engine.py`**: Handles model interaction and prompt construction via `reasoning_engine()`, `build_prompt()`, and `ask_model()`.
+- **`ingestion/pdf_parser.py`**: Handles document loading and text extraction via `load_papers()` and `extract_text()`.
+- **`ingestion/chunker.py`**: Manages text segmentation via `chunk_text()` and `is_valid_chunk()`.
 - **`database/chroma_store.py`**: Manages data persistence via `store_chunks()`.
-- **`embeddings/embedder.py`**: Generates vector representations of text chunks.
-- **`retrieval/search.py`**: Performs searches across the stored papers.
-- **`reasoning/context_ranker.py`**: Ranks retrieved context for the reasoning engine.
+- **`retrieval/search.py`**: Implements document retrieval via `search_papers()`.
 
 ## Technologies Used
 - **Language**: Python
 - **Libraries**: 
-  - `chromadb` (Vector database)
-  - `sentence_transformers` (Embeddings)
-  - `fitz` (PDF processing)
-  - `prompt_toolkit` (CLI interface)
-  - `rich` (Console formatting)
-  - `requests` (HTTP requests)
-
-## Usage
-```bash
-python main.py
-```
+  - `chromadb`: Vector database storage.
+  - `sentence_transformers`: Text embeddings.
+  - `fitz` (PyMuPDF): PDF text extraction.
+  - `prompt_toolkit`: Command-line interface components.
+  - `rich`: Console formatting and output.
+  - `requests`: HTTP requests for model interaction.
